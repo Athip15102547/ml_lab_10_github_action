@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/User/Downloads/LAB10/mlruns/0/58dbb8646bad4f7e8a4cd1ebaccdd7d8/artifacts
+end_time: 1758549104050
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 58dbb8646bad4f7e8a4cd1ebaccdd7d8
+run_name: data_preprocessing
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1758549103965
+status: 3
+tags: []
+user_id: User
