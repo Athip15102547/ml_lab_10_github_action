@@ -1,0 +1,5 @@
+pandas
+numpy
+scikit-learn
+mlflow
+# เพิ่มแพ็กเกจอื่น ๆ ที่ใช้ 
