@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/User/Downloads/LAB10/mlruns/0/fd5e5720e73d436caa12410fe9e726c0/artifacts
+end_time: 1758541243055
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: fd5e5720e73d436caa12410fe9e726c0
+run_name: data_validation
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1758541242245
+status: 3
+tags: []
+user_id: User

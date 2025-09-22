@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/User/Downloads/LAB10/mlruns/0/f92dcb5c55d444138f34c64047a94d96/artifacts
+end_time: 1758541519251
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: f92dcb5c55d444138f34c64047a94d96
+run_name: train_random_forest
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1758541513979
+status: 3
+tags: []
+user_id: User

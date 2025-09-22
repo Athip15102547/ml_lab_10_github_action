@@ -1,0 +1,10 @@
+artifact_location: file:///C:/Users/User/Downloads/LAB10/mlruns/0/models/m-6ddb69e53ce648dd8e7bbe50ba229555/artifacts
+creation_timestamp: 1758541514237
+experiment_id: '0'
+last_updated_timestamp: 1758541519131
+model_id: m-6ddb69e53ce648dd8e7bbe50ba229555
+model_type: null
+name: model
+source_run_id: f92dcb5c55d444138f34c64047a94d96
+status: 2
+status_message: null
