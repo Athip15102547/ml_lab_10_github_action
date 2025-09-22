@@ -28,6 +28,14 @@ def train():
     tracking_uri = os.getenv("MLFLOW_TRACKING_URI", "file:///tmp/mlruns")
     mlflow.set_tracking_uri(tracking_uri)
     
+    # สร้าง experiment ถ้ายังไม่มี
+    try:
+        experiment_id = mlflow.create_experiment("MLOps_Pipeline")
+    except Exception:
+        experiment_id = mlflow.get_experiment_by_name("MLOps_Pipeline").experiment_id
+    
+    mlflow.set_experiment(experiment_id=experiment_id)
+    
     with mlflow.start_run(run_name="train_random_forest"):
         model = RandomForestClassifier(n_estimators=100, random_state=42)
         model.fit(X_train, y_train)

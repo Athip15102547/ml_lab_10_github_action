@@ -12,6 +12,14 @@ def load_and_predict(model_uri, input_csv, target_col=None):
     # ตั้ง MLflow URI - ใช้ environment variable หรือ default
     tracking_uri = os.getenv("MLFLOW_TRACKING_URI", "file:///tmp/mlruns")
     mlflow.set_tracking_uri(tracking_uri)
+    
+    # สร้าง experiment ถ้ายังไม่มี (สำหรับการโหลดโมเดล)
+    try:
+        experiment_id = mlflow.create_experiment("MLOps_Pipeline")
+    except Exception:
+        experiment_id = mlflow.get_experiment_by_name("MLOps_Pipeline").experiment_id
+    
+    mlflow.set_experiment(experiment_id=experiment_id)
 
     # โหลดโมเดลจาก mlflow
     try:

@@ -30,6 +30,14 @@ def preprocess(file_path, output_path):
     tracking_uri = os.getenv("MLFLOW_TRACKING_URI", "file:///tmp/mlruns")
     mlflow.set_tracking_uri(tracking_uri)
     
+    # สร้าง experiment ถ้ายังไม่มี
+    try:
+        experiment_id = mlflow.create_experiment("MLOps_Pipeline")
+    except Exception:
+        experiment_id = mlflow.get_experiment_by_name("MLOps_Pipeline").experiment_id
+    
+    mlflow.set_experiment(experiment_id=experiment_id)
+    
     with mlflow.start_run(run_name="data_preprocessing"):
         mlflow.log_param("scaler", "StandardScaler")
         mlflow.log_artifact(str(output_path))
