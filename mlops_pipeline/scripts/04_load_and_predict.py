@@ -9,8 +9,17 @@ def load_and_predict(model_uri, input_csv, target_col=None):
     if not os.path.exists(input_csv):
         raise FileNotFoundError(f"❌ Input CSV file not found: {input_csv}")
 
+    # ตั้ง MLflow URI - ใช้ environment variable หรือ default
+    tracking_uri = os.getenv("MLFLOW_TRACKING_URI", "file:///tmp/mlruns")
+    mlflow.set_tracking_uri(tracking_uri)
+
     # โหลดโมเดลจาก mlflow
-    model = mlflow.sklearn.load_model(model_uri)
+    try:
+        model = mlflow.sklearn.load_model(model_uri)
+        print(f"✅ Model loaded successfully from: {model_uri}")
+    except Exception as e:
+        print(f"❌ Failed to load model from {model_uri}: {e}")
+        raise
 
     # โหลดข้อมูล csv
     df = pd.read_csv(input_csv)

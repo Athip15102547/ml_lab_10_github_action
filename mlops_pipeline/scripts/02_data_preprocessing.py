@@ -26,7 +26,10 @@ def preprocess(file_path, output_path):
     processed_df.to_csv(output_path, index=False)
     print(f"✅ Preprocessing done. Saved to {output_path}")
 
-    mlflow.set_tracking_uri("file:///tmp/mlruns")
+    # ตั้ง MLflow URI - ใช้ environment variable หรือ default
+    tracking_uri = os.getenv("MLFLOW_TRACKING_URI", "file:///tmp/mlruns")
+    mlflow.set_tracking_uri(tracking_uri)
+    
     with mlflow.start_run(run_name="data_preprocessing"):
         mlflow.log_param("scaler", "StandardScaler")
         mlflow.log_artifact(str(output_path))
@@ -34,4 +37,8 @@ def preprocess(file_path, output_path):
 if __name__ == "__main__":
     input_data_path = Path("train_and_test2.csv")
     output_data_path = Path("train_and_test2_preprocessed.csv")
+    
+    if not input_data_path.exists():
+        raise FileNotFoundError(f"❌ Input data file not found: {input_data_path}")
+    
     preprocess(input_data_path, output_data_path)
