@@ -4,21 +4,18 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 import mlflow
 import mlflow.sklearn
+from pathlib import Path
 import os
 
 def train():
-    # ใช้พาธแบบสัมพันธ์สำหรับไฟล์ที่ผ่านการ preprocessing แล้ว
-    file_path = "train_and_test2_preprocessed.csv"
-    
-    # ตรวจสอบว่าไฟล์มีอยู่จริง
+    file_path = Path("train_and_test2_preprocessed.csv")
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"❌ Input file not found: {file_path}")
 
     df = pd.read_csv(file_path)
     df.columns = df.columns.str.strip()
-    print("Columns:", df.columns.tolist())
 
-    target_col = "2urvived"  # หรือชื่อที่ตรงกับในไฟล์จริง
+    target_col = "2urvived"
     if target_col not in df.columns:
         raise ValueError(f"❌ Target column '{target_col}' not found in dataset!")
 
@@ -27,6 +24,7 @@ def train():
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
+    mlflow.set_tracking_uri("file:///tmp/mlruns")
     with mlflow.start_run(run_name="train_random_forest"):
         model = RandomForestClassifier(n_estimators=100, random_state=42)
         model.fit(X_train, y_train)
