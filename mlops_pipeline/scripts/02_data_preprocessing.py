@@ -1,40 +1,42 @@
 import pandas as pd
-from sklearn.preprocessing import StandardScaler
+import argparse
 import mlflow
+import mlflow.sklearn
 import os
 
-def preprocess(file_path, output_path):
-    # ตรวจสอบว่าไฟล์ต้นฉบับมีอยู่จริงหรือไม่
-    if not os.path.exists(file_path):
-        raise FileNotFoundError(f"❌ Input file not found: {file_path}")
+def load_and_predict(model_uri, input_csv, target_col=None):
+    # ตรวจสอบว่าไฟล์ input มีอยู่จริง
+    if not os.path.exists(input_csv):
+        raise FileNotFoundError(f"❌ Input CSV file not found: {input_csv}")
 
-    df = pd.read_csv(file_path)
-    df.columns = df.columns.str.strip()
+    # โหลดโมเดลจาก mlflow
+    model = mlflow.sklearn.load_model(model_uri)
 
-    target_col = "2urvived"  # หรือชื่อที่ตรงกับในไฟล์จริง
-    if target_col not in df.columns:
-        raise ValueError(f"❌ Target column '{target_col}' not found in dataset!")
+    # โหลดข้อมูล csv
+    df = pd.read_csv(input_csv)
 
-    X = df.drop(target_col, axis=1)
-    y = df[target_col]
+    # ลบคอลัมน์ target ถ้ามี และกําหนดชื่อ
+    if target_col and target_col in df.columns:
+        df = df.drop(target_col, axis=1)
 
-    scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X)
-    X_processed = pd.DataFrame(X_scaled, columns=X.columns)
+    # ทํา prediction
+    predictions = model.predict(df)
 
-    processed_df = pd.concat([X_processed, y.reset_index(drop=True)], axis=1)
-
-    # บันทึกไฟล์ที่ถูก preprocess แล้ว
-    processed_df.to_csv(output_path, index=False)
-    print(f"✅ Preprocessing done. Saved to {output_path}")
-
-    # Log artifact and params to MLflow
-    with mlflow.start_run(run_name="data_preprocessing"):
-        mlflow.log_param("scaler", "StandardScaler")
-        mlflow.log_artifact(output_path)
+    print("📄 Input data preview:")
+    print(df.head())
+    print("\n✅ Predictions:")
+    print(predictions)
 
 if __name__ == "__main__":
-    # ใช้พาธแบบสัมพันธ์
-    input_data_path = "train_and_test2.csv"
-    output_data_path = "train_and_test2_preprocessed.csv"
-    preprocess(input_data_path, output_data_path)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--model_uri", type=str, required=True,
+                        help="MLflow model URI")
+    # แก้ไขพาธเริ่มต้นให้เป็นพาธแบบสัมพันธ์ที่ถูกต้อง
+    parser.add_argument("--input_csv", type=str,
+                        default="train_and_test2_preprocessed.csv", help="Input CSV file path")
+    # เพิ่มการกำหนดค่า default สำหรับ target_col ให้ชัดเจน
+    parser.add_argument("--target_col", type=str, default="2urvived",
+                        help="Name of target column to drop from input if exists")
+    args = parser.parse_args()
+
+    load_and_predict(args.model_uri, args.input_csv, args.target_col)
