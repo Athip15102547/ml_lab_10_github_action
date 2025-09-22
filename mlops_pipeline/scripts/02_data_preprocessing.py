@@ -1,8 +1,13 @@
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 import mlflow
+import os
 
-def preprocess(file_path):
+def preprocess(file_path, output_path):
+    # ตรวจสอบว่าไฟล์ต้นฉบับมีอยู่จริงหรือไม่
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"❌ Input file not found: {file_path}")
+
     df = pd.read_csv(file_path)
     df.columns = df.columns.str.strip()
 
@@ -19,8 +24,7 @@ def preprocess(file_path):
 
     processed_df = pd.concat([X_processed, y.reset_index(drop=True)], axis=1)
 
-    output_path = "C:/Users/User/Downloads/LAB10/train_and_test2_preprocessed.csv"  
-    # ปรับ path ตามต้องการ
+    # บันทึกไฟล์ที่ถูก preprocess แล้ว
     processed_df.to_csv(output_path, index=False)
     print(f"✅ Preprocessing done. Saved to {output_path}")
 
@@ -30,4 +34,7 @@ def preprocess(file_path):
         mlflow.log_artifact(output_path)
 
 if __name__ == "__main__":
-    preprocess("C:/Users/User/Downloads/LAB10/train_and_test2.csv")
+    # ใช้พาธแบบสัมพันธ์
+    input_data_path = "train_and_test2.csv"
+    output_data_path = "train_and_test2_preprocessed.csv"
+    preprocess(input_data_path, output_data_path)

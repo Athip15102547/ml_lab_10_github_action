@@ -4,9 +4,17 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 import mlflow
 import mlflow.sklearn
+import os
 
 def train():
-    df = pd.read_csv("C:/Users/User/Downloads/LAB10/train_and_test2.csv")  # ใช้ไฟล์ที่ผ่าน preprocessing แล้ว
+    # ใช้พาธแบบสัมพันธ์สำหรับไฟล์ที่ผ่านการ preprocessing แล้ว
+    file_path = "train_and_test2_preprocessed.csv"
+    
+    # ตรวจสอบว่าไฟล์มีอยู่จริง
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"❌ Input file not found: {file_path}")
+
+    df = pd.read_csv(file_path)
     df.columns = df.columns.str.strip()
     print("Columns:", df.columns.tolist())
 
